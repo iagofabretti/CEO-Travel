@@ -15,15 +15,17 @@
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <img src="logo.png" alt="CEO Travel Logo" class="logo">
-            <nav class="nav">
-                <a href="#dados-gerais" class="nav-link">Dados Gerais</a>
+            <div class="logo-container">
+                <img src="logo.png" alt="CEO Travel Logo" class="logo">
+            </div>
+            <nav class="section-nav">
+                <a href="#dados-gerais" class="nav-link active">Dados Gerais</a>
                 <a href="#servico-aereo" class="nav-link">Serviço Aéreo</a>
                 <a href="#hospedagem" class="nav-link">Hospedagem</a>
-                <a href="#locacao-veiculos" class="nav-link">Locação de Veículos</a>
-                <a href="#seguro-viagem" class="nav-link">Seguro Viagem</a>
+                <a href="#locacao-veiculos" class="nav-link">Locação</a>
+                <a href="#seguro-viagem" class="nav-link">Seguro</a>
                 <a href="#servicos-gerais" class="nav-link">Serviços Gerais</a>
-                <a href="#resumo-horarios" class="nav-link">Resumo dos Horários</a>
+                <a href="#assinatura" class="nav-link">Assinatura</a>
             </nav>
         </div>
     </header>
@@ -38,297 +40,395 @@
                 
                 <!-- Seção 1: Dados Gerais -->
                 <section id="dados-gerais" class="form-section">
-                    <h2 class="section-title">📋 Dados Gerais</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="cliente">Nome do Cliente *</label>
-                            <input type="text" id="cliente" name="cliente" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="destino">Destino *</label>
-                            <input type="text" id="destino" name="destino" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="data-viagem">Data da Viagem *</label>
-                            <input type="date" id="data-viagem" name="data-viagem" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="data-retorno">Data de Retorno *</label>
-                            <input type="date" id="data-retorno" name="data-retorno" required>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-gerais">Observações Gerais</label>
-                            <textarea id="observacoes-gerais" name="observacoes-gerais" rows="4"></textarea>
+                    <div class="section-header">
+                        <h2 class="section-title">📋 Dados Gerais</h2>
+                        <!-- Dados Gerais sempre ativo -->
+                    </div>
+                    <div class="section-content active" data-section-content="dados-gerais">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="cliente">Nome do Cliente *</label>
+                                <input type="text" id="cliente" name="cliente" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="destino">Destino *</label>
+                                <input type="text" id="destino" name="destino" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-viagem">Data da Viagem *</label>
+                                <input type="date" id="data-viagem" name="data-viagem" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-retorno">Data de Retorno *</label>
+                                <input type="date" id="data-retorno" name="data-retorno" required>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-gerais">Observações Gerais</label>
+                                <textarea id="observacoes-gerais" name="observacoes-gerais" rows="4"></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Seção 2: Serviço Aéreo -->
                 <section id="servico-aereo" class="form-section">
-                    <h2 class="section-title">✈️ Serviço Aéreo</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="cia-aerea">Companhia Aérea</label>
-                            <input type="text" id="cia-aerea" name="cia-aerea">
-                        </div>
-                        <div class="form-group">
-                            <label for="numero-voo-ida">Número do Voo (Ida)</label>
-                            <input type="text" id="numero-voo-ida" name="numero-voo-ida">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-partida-ida">Horário de Partida (Ida)</label>
-                            <input type="time" id="horario-partida-ida" name="horario-partida-ida">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-chegada-ida">Horário de Chegada (Ida)</label>
-                            <input type="time" id="horario-chegada-ida" name="horario-chegada-ida">
-                        </div>
-                        <div class="form-group">
-                            <label for="numero-voo-volta">Número do Voo (Volta)</label>
-                            <input type="text" id="numero-voo-volta" name="numero-voo-volta">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-partida-volta">Horário de Partida (Volta)</label>
-                            <input type="time" id="horario-partida-volta" name="horario-partida-volta">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-chegada-volta">Horário de Chegada (Volta)</label>
-                            <input type="time" id="horario-chegada-volta" name="horario-chegada-volta">
-                        </div>
-                        <div class="form-group">
-                            <label for="classe-voo">Classe do Voo</label>
-                            <select id="classe-voo" name="classe-voo">
-                                <option value="">Selecione...</option>
-                                <option value="economica">Econômica</option>
-                                <option value="executiva">Executiva</option>
-                                <option value="primeira-classe">Primeira Classe</option>
-                            </select>
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Bagagem Despachada</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="bagagem-despachada" value="sim"> Sim</label>
-                                <label><input type="radio" name="bagagem-despachada" value="nao"> Não</label>
+                    <div class="section-header">
+                        <h2 class="section-title">✈️ Serviço Aéreo</h2>
+                        <button type="button" class="toggle-section-btn" data-section="servico-aereo">
+                            <span class="toggle-icon">➕</span> Adicionar Serviço
+                        </button>
+                    </div>
+                    <div class="section-content" data-section-content="servico-aereo">
+                        <div class="cancellation-rules">
+                            <h3>Regras e Políticas</h3>
+                            <div class="rule-item">
+                                <strong>Cancelamento:</strong> A tarifa não permite cancelamento. Uma vez a compra finalizada não há cancelamento, ou seja, perde-se o valor da viagem.
+                            </div>
+                            <div class="rule-item">
+                                <strong>Alteração:</strong> A tarifa não permite alteração. Uma vez a compra finalizada não há como alterar.
+                            </div>
+                            <div class="rule-item">
+                                <strong>Reembolso:</strong> A tarifa não permite reembolso. Uma vez a compra finalizada não há cancelamento, ou seja, perde-se o valor da viagem.
                             </div>
                         </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-aereo">Observações sobre o Serviço Aéreo</label>
-                            <textarea id="observacoes-aereo" name="observacoes-aereo" rows="3"></textarea>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="cia-aerea">Companhia Aérea</label>
+                                <input type="text" id="cia-aerea" name="cia-aerea" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero-voo-ida">Número do Voo (Ida)</label>
+                                <input type="text" id="numero-voo-ida" name="numero-voo-ida" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-partida-ida">Horário de Partida (Ida)</label>
+                                <input type="time" id="horario-partida-ida" name="horario-partida-ida" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-chegada-ida">Horário de Chegada (Ida)</label>
+                                <input type="time" id="horario-chegada-ida" name="horario-chegada-ida" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero-voo-volta">Número do Voo (Volta)</label>
+                                <input type="text" id="numero-voo-volta" name="numero-voo-volta" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-partida-volta">Horário de Partida (Volta)</label>
+                                <input type="time" id="horario-partida-volta" name="horario-partida-volta" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-chegada-volta">Horário de Chegada (Volta)</label>
+                                <input type="time" id="horario-chegada-volta" name="horario-chegada-volta" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="classe-voo">Classe do Voo</label>
+                                <select id="classe-voo" name="classe-voo" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="economica">Econômica</option>
+                                    <option value="executiva">Executiva</option>
+                                    <option value="primeira-classe">Primeira Classe</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Bagagem Despachada</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="bagagem-despachada" value="sim" disabled> Sim</label>
+                                    <label><input type="radio" name="bagagem-despachada" value="nao" disabled> Não</label>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-aereo">Observações sobre o Serviço Aéreo</label>
+                                <textarea id="observacoes-aereo" name="observacoes-aereo" rows="3" disabled></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Seção 3: Serviço de Hospedagem -->
                 <section id="hospedagem" class="form-section">
-                    <h2 class="section-title">🏨 Serviço de Hospedagem</h2>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="nome-hotel">Nome do Hotel</label>
-                            <input type="text" id="nome-hotel" name="nome-hotel">
-                        </div>
-                        <div class="form-group">
-                            <label for="endereco-hotel">Endereço</label>
-                            <input type="text" id="endereco-hotel" name="endereco-hotel">
-                        </div>
-                        <div class="form-group">
-                            <label for="data-checkin">Data de Check-in</label>
-                            <input type="date" id="data-checkin" name="data-checkin">
-                        </div>
-                        <div class="form-group">
-                            <label for="data-checkout">Data de Check-out</label>
-                            <input type="date" id="data-checkout" name="data-checkout">
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo-quarto">Tipo de Quarto</label>
-                            <select id="tipo-quarto" name="tipo-quarto">
-                                <option value="">Selecione...</option>
-                                <option value="single">Single</option>
-                                <option value="duplo">Duplo</option>
-                                <option value="suite">Suíte</option>
-                                <option value="presidencial">Presidencial</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="regime-alimentacao">Regime de Alimentação</label>
-                            <select id="regime-alimentacao" name="regime-alimentacao">
-                                <option value="">Selecione...</option>
-                                <option value="cafe-manha">Café da Manhã</option>
-                                <option value="meia-pensao">Meia Pensão</option>
-                                <option value="pensao-completa">Pensão Completa</option>
-                                <option value="all-inclusive">All Inclusive</option>
-                            </select>
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Necessita de Transfer do Aeroporto para o Hotel?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="transfer-hotel" value="sim"> Sim</label>
-                                <label><input type="radio" name="transfer-hotel" value="nao"> Não</label>
+                    <div class="section-header">
+                        <h2 class="section-title">🏨 Serviço de Hospedagem</h2>
+                        <button type="button" class="toggle-section-btn" data-section="hospedagem">
+                            <span class="toggle-icon">➕</span> Adicionar Serviço
+                        </button>
+                    </div>
+                    <div class="section-content" data-section-content="hospedagem">
+                        <div class="cancellation-rules">
+                            <h3>Regras e Políticas</h3>
+                            <div class="rule-item">
+                                <strong>Cancelamento:</strong> Gratuito até 30 dias antes. Multa de 50% até 15 dias
+                            </div>
+                            <div class="rule-item">
+                                <strong>Alteração:</strong> Permitida sujeita à disponibilidade
+                            </div>
+                            <div class="rule-item">
+                                <strong>Reembolso:</strong> Reembolso proporcional conforme política de cancelamento
                             </div>
                         </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-hospedagem">Observações sobre a Hospedagem</label>
-                            <textarea id="observacoes-hospedagem" name="observacoes-hospedagem" rows="3"></textarea>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="nome-hotel">Nome do Hotel</label>
+                                <input type="text" id="nome-hotel" name="nome-hotel" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="endereco-hotel">Endereço</label>
+                                <input type="text" id="endereco-hotel" name="endereco-hotel" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-checkin">Data de Check-in</label>
+                                <input type="date" id="data-checkin" name="data-checkin" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-checkout">Data de Check-out</label>
+                                <input type="date" id="data-checkout" name="data-checkout" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-quarto">Tipo de Quarto</label>
+                                <select id="tipo-quarto" name="tipo-quarto" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="single">Single</option>
+                                    <option value="duplo">Duplo</option>
+                                    <option value="suite">Suíte</option>
+                                    <option value="presidencial">Presidencial</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="regime-alimentacao">Regime de Alimentação</label>
+                                <select id="regime-alimentacao" name="regime-alimentacao" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="cafe-manha">Café da Manhã</option>
+                                    <option value="meia-pensao">Meia Pensão</option>
+                                    <option value="pensao-completa">Pensão Completa</option>
+                                    <option value="all-inclusive">All Inclusive</option>
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Necessita de Transfer do Aeroporto para o Hotel?</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="transfer-hotel" value="sim" disabled> Sim</label>
+                                    <label><input type="radio" name="transfer-hotel" value="nao" disabled> Não</label>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-hospedagem">Observações sobre a Hospedagem</label>
+                                <textarea id="observacoes-hospedagem" name="observacoes-hospedagem" rows="3" disabled></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Seção 4: Serviço de Locação de Veículos -->
                 <section id="locacao-veiculos" class="form-section">
-                    <h2 class="section-title">🚗 Serviço de Locação de Veículos</h2>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label>Necessita de Locação de Veículo?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="necessita-locacao" value="sim"> Sim</label>
-                                <label><input type="radio" name="necessita-locacao" value="nao"> Não</label>
+                    <div class="section-header">
+                        <h2 class="section-title">🚗 Serviço de Locação de Veículos</h2>
+                        <button type="button" class="toggle-section-btn" data-section="locacao-veiculos">
+                            <span class="toggle-icon">➕</span> Adicionar Serviço
+                        </button>
+                    </div>
+                    <div class="section-content" data-section-content="locacao-veiculos">
+                        <div class="cancellation-rules">
+                            <h3>Regras e Políticas</h3>
+                            <div class="rule-item">
+                                <strong>Cancelamento:</strong> Gratuito até 48h antes. Multa de 1 diária após
+                            </div>
+                            <div class="rule-item">
+                                <strong>Alteração:</strong> Permitida sem taxa com 24h de antecedência
+                            </div>
+                            <div class="rule-item">
+                                <strong>Reembolso:</strong> Reembolso integral se cancelado dentro do prazo
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="locadora">Locadora</label>
-                            <input type="text" id="locadora" name="locadora">
-                        </div>
-                        <div class="form-group">
-                            <label for="categoria-veiculo">Categoria do Veículo</label>
-                            <select id="categoria-veiculo" name="categoria-veiculo">
-                                <option value="">Selecione...</option>
-                                <option value="economico">Econômico</option>
-                                <option value="compacto">Compacto</option>
-                                <option value="intermediario">Intermediário</option>
-                                <option value="suv">SUV</option>
-                                <option value="luxo">Luxo</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="data-retirada">Data de Retirada</label>
-                            <input type="date" id="data-retirada" name="data-retirada">
-                        </div>
-                        <div class="form-group">
-                            <label for="data-devolucao">Data de Devolução</label>
-                            <input type="date" id="data-devolucao" name="data-devolucao">
-                        </div>
-                        <div class="form-group">
-                            <label for="local-retirada">Local de Retirada</label>
-                            <input type="text" id="local-retirada" name="local-retirada">
-                        </div>
-                        <div class="form-group">
-                            <label for="local-devolucao">Local de Devolução</label>
-                            <input type="text" id="local-devolucao" name="local-devolucao">
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-locacao">Observações sobre a Locação</label>
-                            <textarea id="observacoes-locacao" name="observacoes-locacao" rows="3"></textarea>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Necessita de Locação de Veículo?</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="necessita-locacao" value="sim" disabled> Sim</label>
+                                    <label><input type="radio" name="necessita-locacao" value="nao" disabled> Não</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="locadora">Locadora</label>
+                                <input type="text" id="locadora" name="locadora" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="categoria-veiculo">Categoria do Veículo</label>
+                                <select id="categoria-veiculo" name="categoria-veiculo" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="economico">Econômico</option>
+                                    <option value="compacto">Compacto</option>
+                                    <option value="intermediario">Intermediário</option>
+                                    <option value="suv">SUV</option>
+                                    <option value="luxo">Luxo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-retirada">Data de Retirada</label>
+                                <input type="date" id="data-retirada" name="data-retirada" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-devolucao">Data de Devolução</label>
+                                <input type="date" id="data-devolucao" name="data-devolucao" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="local-retirada">Local de Retirada</label>
+                                <input type="text" id="local-retirada" name="local-retirada" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="local-devolucao">Local de Devolução</label>
+                                <input type="text" id="local-devolucao" name="local-devolucao" disabled>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-locacao">Observações sobre a Locação</label>
+                                <textarea id="observacoes-locacao" name="observacoes-locacao" rows="3" disabled></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Seção 5: Seguro Viagem -->
                 <section id="seguro-viagem" class="form-section">
-                    <h2 class="section-title">🛡️ Seguro Viagem</h2>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label>Necessita de Seguro Viagem?</label>
-                            <div class="radio-group">
-                                <label><input type="radio" name="necessita-seguro" value="sim"> Sim</label>
-                                <label><input type="radio" name="necessita-seguro" value="nao"> Não</label>
+                    <div class="section-header">
+                        <h2 class="section-title">🛡️ Seguro Viagem</h2>
+                        <button type="button" class="toggle-section-btn" data-section="seguro-viagem">
+                            <span class="toggle-icon">➕</span> Adicionar Serviço
+                        </button>
+                    </div>
+                    <div class="section-content" data-section-content="seguro-viagem">
+                        <div class="cancellation-rules">
+                            <h3>Regras e Políticas</h3>
+                            <div class="rule-item">
+                                <strong>Cancelamento:</strong> Permitido até 7 dias após emissão
+                            </div>
+                            <div class="rule-item">
+                                <strong>Alteração:</strong> Não permitida após início da viagem
+                            </div>
+                            <div class="rule-item">
+                                <strong>Reembolso:</strong> Reembolso proporcional conforme uso
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="seguradora">Seguradora</label>
-                            <input type="text" id="seguradora" name="seguradora">
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo-cobertura">Tipo de Cobertura</label>
-                            <select id="tipo-cobertura" name="tipo-cobertura">
-                                <option value="">Selecione...</option>
-                                <option value="basica">Básica</option>
-                                <option value="completa">Completa</option>
-                                <option value="premium">Premium</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="valor-cobertura">Valor da Cobertura</label>
-                            <input type="text" id="valor-cobertura" name="valor-cobertura" placeholder="Ex: USD 50.000">
-                        </div>
-                        <div class="form-group">
-                            <label for="numero-apolice">Número da Apólice</label>
-                            <input type="text" id="numero-apolice" name="numero-apolice">
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-seguro">Observações sobre o Seguro</label>
-                            <textarea id="observacoes-seguro" name="observacoes-seguro" rows="3"></textarea>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Necessita de Seguro Viagem?</label>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="necessita-seguro" value="sim" disabled> Sim</label>
+                                    <label><input type="radio" name="necessita-seguro" value="nao" disabled> Não</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="seguradora">Seguradora</label>
+                                <input type="text" id="seguradora" name="seguradora" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-cobertura">Tipo de Cobertura</label>
+                                <select id="tipo-cobertura" name="tipo-cobertura" disabled>
+                                    <option value="">Selecione...</option>
+                                    <option value="basica">Básica</option>
+                                    <option value="completa">Completa</option>
+                                    <option value="premium">Premium</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-cobertura">Valor da Cobertura</label>
+                                <input type="text" id="valor-cobertura" name="valor-cobertura" placeholder="Ex: USD 50.000" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero-apolice">Número da Apólice</label>
+                                <input type="text" id="numero-apolice" name="numero-apolice" disabled>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-seguro">Observações sobre o Seguro</label>
+                                <textarea id="observacoes-seguro" name="observacoes-seguro" rows="3" disabled></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Seção 6: Serviços Gerais -->
                 <section id="servicos-gerais" class="form-section">
-                    <h2 class="section-title">🎯 Serviços Gerais (Passeios, Transfer)</h2>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="passeio-1">Passeio 1</label>
-                            <input type="text" id="passeio-1" name="passeio-1" placeholder="Nome do passeio">
+                    <div class="section-header">
+                        <h2 class="section-title">🎯 Serviços Gerais (Passeios, Transfer)</h2>
+                        <button type="button" class="toggle-section-btn" data-section="servicos-gerais">
+                            <span class="toggle-icon">➕</span> Adicionar Serviço
+                        </button>
+                    </div>
+                    <div class="section-content" data-section-content="servicos-gerais">
+                        <div class="cancellation-rules">
+                            <h3>Regras e Políticas</h3>
+                            <div class="rule-item">
+                                <strong>Cancelamento:</strong> Até 72h antes: reembolso 100%
+                            </div>
+                            <div class="rule-item">
+                                <strong>Alteração:</strong> Permitida com 48h de antecedência
+                            </div>
+                            <div class="rule-item">
+                                <strong>Reembolso:</strong> Sem reembolso para cancelamento em cima da hora
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="data-passeio-1">Data do Passeio 1</label>
-                            <input type="date" id="data-passeio-1" name="data-passeio-1">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-passeio-1">Horário do Passeio 1</label>
-                            <input type="time" id="horario-passeio-1" name="horario-passeio-1">
-                        </div>
-                        
-                        <div class="form-group full-width">
-                            <label for="passeio-2">Passeio 2</label>
-                            <input type="text" id="passeio-2" name="passeio-2" placeholder="Nome do passeio">
-                        </div>
-                        <div class="form-group">
-                            <label for="data-passeio-2">Data do Passeio 2</label>
-                            <input type="date" id="data-passeio-2" name="data-passeio-2">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-passeio-2">Horário do Passeio 2</label>
-                            <input type="time" id="horario-passeio-2" name="horario-passeio-2">
-                        </div>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="passeio-1">Passeio 1</label>
+                                <input type="text" id="passeio-1" name="passeio-1" placeholder="Nome do passeio" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-passeio-1">Data do Passeio 1</label>
+                                <input type="date" id="data-passeio-1" name="data-passeio-1" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-passeio-1">Horário do Passeio 1</label>
+                                <input type="time" id="horario-passeio-1" name="horario-passeio-1" disabled>
+                            </div>
+                            
+                            <div class="form-group full-width">
+                                <label for="passeio-2">Passeio 2</label>
+                                <input type="text" id="passeio-2" name="passeio-2" placeholder="Nome do passeio" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-passeio-2">Data do Passeio 2</label>
+                                <input type="date" id="data-passeio-2" name="data-passeio-2" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-passeio-2">Horário do Passeio 2</label>
+                                <input type="time" id="horario-passeio-2" name="horario-passeio-2" disabled>
+                            </div>
 
-                        <div class="form-group full-width">
-                            <label for="passeio-3">Passeio 3</label>
-                            <input type="text" id="passeio-3" name="passeio-3" placeholder="Nome do passeio">
-                        </div>
-                        <div class="form-group">
-                            <label for="data-passeio-3">Data do Passeio 3</label>
-                            <input type="date" id="data-passeio-3" name="data-passeio-3">
-                        </div>
-                        <div class="form-group">
-                            <label for="horario-passeio-3">Horário do Passeio 3</label>
-                            <input type="time" id="horario-passeio-3" name="horario-passeio-3">
-                        </div>
+                            <div class="form-group full-width">
+                                <label for="passeio-3">Passeio 3</label>
+                                <input type="text" id="passeio-3" name="passeio-3" placeholder="Nome do passeio" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-passeio-3">Data do Passeio 3</label>
+                                <input type="date" id="data-passeio-3" name="data-passeio-3" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="horario-passeio-3">Horário do Passeio 3</label>
+                                <input type="time" id="horario-passeio-3" name="horario-passeio-3" disabled>
+                            </div>
 
-                        <div class="form-group full-width">
-                            <label for="transfer-adicional">Transfer Adicional</label>
-                            <textarea id="transfer-adicional" name="transfer-adicional" rows="3" placeholder="Descreva transfers adicionais necessários"></textarea>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-servicos-gerais">Observações sobre Serviços Gerais</label>
-                            <textarea id="observacoes-servicos-gerais" name="observacoes-servicos-gerais" rows="3"></textarea>
+                            <div class="form-group full-width">
+                                <label for="transfer-adicional">Transfer Adicional</label>
+                                <textarea id="transfer-adicional" name="transfer-adicional" rows="3" placeholder="Descreva transfers adicionais necessários" disabled></textarea>
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="observacoes-servicos-gerais">Observações sobre Serviços Gerais</label>
+                                <textarea id="observacoes-servicos-gerais" name="observacoes-servicos-gerais" rows="3" disabled></textarea>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Seção 7: Resumo dos Horários -->
-                <section id="resumo-horarios" class="form-section">
-                    <h2 class="section-title">📋 Resumo dos Horários</h2>
-                    <div class="form-grid">
-                        <div class="form-group full-width">
-                            <label for="resumo-horarios-texto">Resumo Geral dos Horários da Viagem</label>
-                            <textarea id="resumo-horarios-texto" name="resumo-horarios-texto" rows="6" placeholder="Insira um resumo consolidado de todos os horários importantes da viagem"></textarea>
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="contato-emergencia">Contato de Emergência</label>
-                            <input type="text" id="contato-emergencia" name="contato-emergencia" placeholder="Nome e telefone">
-                        </div>
-                        <div class="form-group full-width">
-                            <label for="observacoes-finais">Observações Finais</label>
-                            <textarea id="observacoes-finais" name="observacoes-finais" rows="4"></textarea>
+                <!-- Seção 7: Assinatura Digital -->
+                <section id="assinatura" class="form-section">
+                    <div class="section-header">
+                        <h2 class="section-title">✍️ Assinatura Digital</h2>
+                        <!-- Assinatura Digital sempre ativa -->
+                    </div>
+                    <div class="section-content active" data-section-content="assinatura">
+                        <div class="signature-container">
+                            <label>Assine abaixo com o mouse ou toque:</label>
+                            <canvas id="signature-canvas" width="800" height="200"></canvas>
+                            <div class="signature-actions">
+                                <button type="button" class="btn btn-secondary" onclick="clearSignature()">Limpar Assinatura</button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -349,6 +449,112 @@
         </div>
     </footer>
 
+    <!-- Modal de Termos e Condições -->
+    <div id="terms-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚠️ ATENÇÃO, VIAJANTE!</h2>
+                <p class="modal-subtitle">LEIA COM ATENÇÃO AS REGRAS DOS SERVIÇOS CONTRATADOS</p>
+            </div>
+            <div class="modal-body">
+                <div class="terms-section">
+                    <h3>✈️ PASSAGENS AÉREAS</h3>
+                    <div class="terms-subsection">
+                        <h4>Voos Domésticos:</h4>
+                        <ul>
+                            <li>Realize o check-in com antecedência pelo site ou app da companhia aérea.</li>
+                            <li>Caso não consiga, apresente-se no balcão com no mínimo 3 horas de antecedência.</li>
+                            <li>O atendimento no balcão encerra 1 hora antes da decolagem.</li>
+                        </ul>
+                    </div>
+                    <div class="terms-subsection">
+                        <h4>Voos Internacionais:</h4>
+                        <ul>
+                            <li>Recomendamos check-in online sempre que possível.</li>
+                            <li>Se necessário, vá ao balcão de check-in com mínimo de 4 horas de antecedência.</li>
+                            <li>O atendimento se encerra com 2 horas de antecedência ao voo.</li>
+                            <li>Verifique antecipadamente com a equipe da CEO TRAVEL as exigências de documentação, vistos, vacinas e regras de bagagem para seu destino.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="terms-section">
+                    <h3>🏨 HOSPEDAGEM</h3>
+                    <ul>
+                        <li>Confirme os horários de check-in e check-out diretamente com o hotel.</li>
+                        <li>Verifique se o café da manhã está incluído e o horário de funcionamento.</li>
+                        <li>Ao fazer o check-out, revise e assine a nota fiscal para evitar cobranças indevidas.</li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>🚗 LOCAÇÃO DE VEÍCULOS</h3>
+                    <div class="terms-subsection">
+                        <h4>INCLUÍDO NA TARIFA:</h4>
+                        <ul>
+                            <li>Quilometragem livre para locações com plano de tarifa diárias e semanais.</li>
+                            <li>Locações mensais incluem até 3.000 km/mês.</li>
+                            <li><strong>ATENÇÃO:</strong> Quilometragem excedente será cobrada conforme contrato.</li>
+                            <li>Proteções contra colisão, roubo, furto e avarias, com franquia (varia por grupo de veículo).</li>
+                            <li>Proteção contra terceiros com franquia de R$ 2.000,00.</li>
+                        </ul>
+                    </div>
+                    <div class="terms-subsection">
+                        <h4>NÃO INCLUÍDO NA TARIFA:</h4>
+                        <ul>
+                            <li>Combustível.</li>
+                            <li>Acessórios, equipamentos e serviços especiais.</li>
+                            <li>Proteção adicional para vidros e pneus (pode ser contratada à parte).</li>
+                            <li>Taxas de serviço: 12% para locações diárias/semanais e 20% para mensais.</li>
+                            <li>A proteção padrão não cobre pneus, vidros, acessórios e itens não estruturais do veículo.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="terms-section">
+                    <h3>📋 INFORMAÇÕES IMPORTANTES SOBRE A LOCAÇÃO</h3>
+                    <ul>
+                        <li>Em caso de prorrogação, mesmo que a locadora emita novo voucher, as regras do primeiro contrato continuam válidas, salvo mudança de tarifário (sujeito à política da locadora).</li>
+                        <li>Locações prorrogadas podem sofrer alterações no plano, como novo valor de diária e/ou nova política de quilometragem.</li>
+                        <li>Em caso de quilometragens altas (a cada 5.000 km), é obrigatório comunicar a locadora, podendo ser exigida a ida a uma loja para verificação, revisão ou manutenção do veículo.</li>
+                        <li>Em caso de sinistro, é obrigatória a apresentação de B.O. e preenchimento de formulário de acidente na loja de retirada, dentro do prazo contratual.</li>
+                        <li>Leia atentamente o contrato de locação no momento da retirada do veículo.</li>
+                        <li><a href="https://www.movida.com.br/pdf/contrato_publico.pdf" target="_blank">Contrato Movida</a></li>
+                        <li><a href="https://www.localiza.com/Contratos/brasil/pt/Contrato_Geral_Aluguel_de_Carros.pdf" target="_blank">Contrato Localiza</a></li>
+                    </ul>
+                </div>
+
+                <div class="terms-section">
+                    <h3>💡 DICAS EXTRAS</h3>
+                    <ul>
+                        <li>Consulte nossa equipe caso tenha dúvidas específicas ou vá realizar uma locação internacional.</li>
+                        <li>Em caso de emergência, entre em contato com nosso atendimento 24h:</li>
+                        <li>📞 +55 11 3016-0060 | 📱 +55 11 96473-8188</li>
+                    </ul>
+                </div>
+
+                <div class="terms-footer">
+                    <p><strong>Desejamos uma excelente viagem e bons negócios!</strong></p>
+                    <p>Equipe CEO TRAVEL</p>
+                    <p>Mais informações, consulte nosso blog: <a href="https://www.ceotravel.com.br/blog/" target="_blank">www.ceotravel.com.br/blog</a></p>
+                </div>
+
+                <div class="terms-accept">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="accept-terms">
+                        <span>Li e aceito todos os termos e condições acima</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeTermsModal()">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="acceptTermsAndSubmit()" disabled id="confirm-terms-btn">Confirmar e Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
