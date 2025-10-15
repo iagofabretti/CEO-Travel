@@ -359,8 +359,12 @@ async function submitFormData() {
     const data = collectFormData();
     
     try {
-        // Gerar PDF primeiro
-        await generatePDF(data);
+        // gerar PDF e obter seu Base64 + nome
+        const pdfResult = await generatePDF(data);
+        if (pdfResult && pdfResult.base64 && pdfResult.fileName) {
+            data['pdf_base64'] = pdfResult.base64;
+            data['pdf_filename'] = pdfResult.fileName;
+        }
         
         // Enviar dados para o Google Sheets
         // Nota: mode 'no-cors' é necessário para Google Apps Script
