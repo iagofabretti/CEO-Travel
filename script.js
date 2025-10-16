@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO DO GOOGLE SHEETS
 // ============================================
 // Substitua pela URL do seu Web App do Google Apps Script
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVMlnEEMNtov3ozI_YHghKh9gqy6wXbQL2U5QH7p9am_E_WY8rl6NvDFcqno0P17_T/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzz4rhjOTg3GhF2Pm0LL1CrhvBNEmXTcfkH6C9CeR54GCkFKggZsC8bgSEwXt3lkysM3A/exec';
 // ============================================
 
 // Variáveis globais
