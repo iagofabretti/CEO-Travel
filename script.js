@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO DO GOOGLE SHEETS
 // ============================================
 // Substitua pela URL do seu Web App do Google Apps Script
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzz4rhjOTg3GhF2Pm0LL1CrhvBNEmXTcfkH6C9CeR54GCkFKggZsC8bgSEwXt3lkysM3A/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVMlnEEMNtov3ozI_YHghKh9gqy6wXbQL2U5QH7p9am_E_WY8rl6NvDFcqno0P17_T/exec';
 // ============================================
 
 // Variáveis globais
@@ -359,44 +359,32 @@ async function submitFormData() {
     const data = collectFormData();
     
     try {
-        // Gerar o PDF e obter sua base64 e nome
-        const pdfResult = await generatePDF(data);
-        if (pdfResult && pdfResult.base64 && pdfResult.fileName) {
-            // Adicionar o PDF à carga útil
-            data['pdf_base64'] = pdfResult.base64;
-            data['pdf_filename'] = pdfResult.fileName;
-        }
-
-        // Salvar localmente todos os dados (opcional)
-        try {
-            savePayloadAsTxt(data);
-        } catch (saveErr) {
-            console.warn('Não foi possível salvar payload localmente:', saveErr);
-        }
-
-        // Enviar dados para o Google Apps Script (CORS habilitado)
+        // Gerar PDF primeiro
+        await generatePDF(data);
+        
+        // Enviar dados para o Google Sheets
+        // Nota: mode 'no-cors' é necessário para Google Apps Script
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(data)
         });
-
-        // Ler a resposta JSON do Apps Script
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            alert('✅ Formulário enviado com sucesso!\n\nO PDF foi salvo no Google Drive e os dados foram registrados na planilha.');
-            clearForm();
-        } else {
-            alert('⚠️ Erro ao salvar dados: ' + (result.message || 'Erro desconhecido'));
-        }
-
+        
+        // Com mode 'no-cors', não conseguimos ler a resposta
+        // Assumimos sucesso se não houver erro
+        alert('✅ Formulário enviado com sucesso!\n\nO PDF foi gerado e os dados foram enviados para o Google Sheets.\n\nVerifique sua planilha para confirmar.');
+        
+        // Limpar formulário
+        clearForm();
+        
     } catch (error) {
         console.error('Erro ao enviar formulário:', error);
-        alert('❌ Erro ao enviar formulário.\n\nPor favor, verifique:\n1. Se a URL do Google Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se "Quem tem acesso" está como "Qualquer pessoa"');
+        alert('❌ Erro ao enviar formulário.\n\nO PDF foi gerado, mas houve um problema ao salvar os dados no Google Sheets.\n\nPor favor, verifique:\n1. Se a URL do Google Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se "Quem tem acesso" está como "Qualquer pessoa"');
     }
 }
-
 
 // ============================================
 // GERAÇÃO DE PDF COM PAPEL TIMBRADO
@@ -607,50 +595,6 @@ async function generatePDF(data) {
         checkPageBreak();
     }
     
-    // --------------------------------------------------------------------------------------
-    // Termos e Condições (inserir antes da assinatura)
-    // Vamos extrair o texto do modal de termos e adicionar ao PDF.
-    // Caso o modal não exista ou esteja vazio, pulamos esta etapa.
-    try {
-        // Capturar o conteúdo da área de termos. Usamos textContent para obter texto plano
-        const termsModalBody = document.querySelector('#terms-modal .modal-body');
-        if (termsModalBody) {
-            const rawText = termsModalBody.innerText || termsModalBody.textContent || '';
-            const lines = rawText
-                .split('\n')
-                .map(l => l.trim())
-                .filter(l => l.length > 0);
-            if (lines.length > 0) {
-                // Título da seção de termos
-                checkPageBreak();
-                doc.setFontSize(12);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(201, 169, 97);
-                doc.text('Termos e Condições', margin, yPosition);
-                yPosition += lineHeight;
-                
-                // Adiciona cada linha do texto de termos
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(60, 60, 60);
-                lines.forEach(line => {
-                    checkPageBreak();
-                    // Quebrar linhas longas para caber na largura da página
-                    const splitLines = doc.splitTextToSize(line, pageWidth - margin * 2);
-                    splitLines.forEach(splitLine => {
-                        doc.text(splitLine, margin, yPosition);
-                        yPosition += lineHeight;
-                        checkPageBreak();
-                    });
-                });
-                yPosition += lineHeight;
-            }
-        }
-    } catch (err) {
-        console.error('Erro ao adicionar termos ao PDF:', err);
-    }
-
-    // --------------------------------------------------------------------------------------
     // Assinatura Digital
     if (signatureData) {
         checkPageBreak();
@@ -680,51 +624,15 @@ async function generatePDF(data) {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(100, 100, 100);
     doc.text(`Termos e Condições Aceitos: ${data.termos_aceitos} em ${data.data_aceite_termos}`, margin, yPosition);
-    yPosition += lineHeight;
-
-    // ------------------------------------------------------------------------
-    // Salvar PDF e retornar base64
-    const fileName = `Formulario_CEO_Travel_${data.cliente.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
-    // Gerar string Base64 do PDF (Data URI)
-    const dataUriString = doc.output('datauristring');
-    // Extrair apenas a parte Base64 (após a vírgula)
-    const base64 = dataUriString.split(',')[1];
-    // Salvar localmente (download para usuário)
-    doc.save(fileName);
     
-    // Retornar objeto com base64 e nome do arquivo
-    return { base64, fileName };
+    // Salvar PDF
+    const fileName = `Formulario_CEO_Travel_${data.cliente.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
+    doc.save(fileName);
 }
 
 // ============================================
 // FUNÇÕES AUXILIARES
 // ============================================
-
-/**
- * Salva o payload como um arquivo .txt no computador do usuário (download pelo navegador).
- * O arquivo será baixado na pasta padrão de downloads do navegador.
- */
-function savePayloadAsTxt(payload) {
-    try {
-        const jsonString = JSON.stringify(payload, null, 2);
-        const blob = new Blob([jsonString], { type: 'text/plain;charset=utf-8' });
-        const fileName = `payload_ceo_travel_${new Date().getTime()}.txt`;
-
-        // Criar link temporário e clicar para forçar download
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    } catch (err) {
-        console.error('Erro ao salvar payload como txt:', err);
-        throw err;
-    }
-}
-
 
 function clearForm() {
     const form = document.getElementById('travel-form');
