@@ -389,7 +389,7 @@ async function submitFormData() {
         
         // Com mode 'no-cors', não conseguimos ler a resposta
         // Assumimos sucesso se não houver erro
-        alert('✅ Formulário enviado com sucesso!\n\nO PDF foi gerado e os dados foram enviados para o Google Sheets.\n\nVerifique sua planilha para confirmar.');
+        alert('✅ Formulário enviado com sucesso!\n\nO PDF foi gerado e os dados foram enviados para o Google Sheets.');
         
         // Limpar formulário
         clearForm();
@@ -829,4 +829,5 @@ function clearForm() {
     // Rolar para o topo
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 
