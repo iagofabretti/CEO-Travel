@@ -84,6 +84,7 @@ function initializeNavigationLinks() {
     });
 }
 
+
 // Observer para atualizar o link ativo durante o scroll
 function initializeSectionObserver() {
     const sections = document.querySelectorAll('.form-section');
@@ -504,7 +505,14 @@ async function generatePDF(data) {
         doc.text(`Classe: ${data['classe-voo'] || 'N/A'}`, margin, yPosition);
         yPosition += lineHeight;
         doc.text(`Bagagem Despachada: ${data['bagagem-despachada'] || 'N/A'}`, margin, yPosition);
-        yPosition += lineHeight * 2;
+        yPosition += lineHeight;
+        // Adicionar observações do serviço aéreo, se existirem
+        if (data['observacoes-aereo']) {
+            doc.text(`Observações: ${data['observacoes-aereo']}`, margin, yPosition);
+            yPosition += lineHeight;
+        }
+        // Espaçamento adicional antes de outra seção
+        yPosition += lineHeight;
         
         checkPageBreak();
     }
@@ -529,19 +537,33 @@ async function generatePDF(data) {
         doc.text(`Tipo de Quarto: ${data['tipo-quarto'] || 'N/A'}`, margin, yPosition);
         yPosition += lineHeight;
         doc.text(`Regime: ${data['regime-alimentacao'] || 'N/A'}`, margin, yPosition);
-        yPosition += lineHeight * 2;
+        yPosition += lineHeight;
+        // Adicionar informação de transfer aeroporto-hotel (Sim/Não), se disponível
+        if (data['transfer-hotel']) {
+            const transferText = data['transfer-hotel'].toString().toLowerCase() === 'sim' ? 'Sim' : (data['transfer-hotel'].toString().toLowerCase() === 'nao' ? 'Não' : data['transfer-hotel']);
+            doc.text(`Transfer Aeroporto-Hotel: ${transferText}`, margin, yPosition);
+            yPosition += lineHeight;
+        }
+        // Adicionar observações de hospedagem, se existirem
+        if (data['observacoes-hospedagem']) {
+            doc.text(`Observações: ${data['observacoes-hospedagem']}`, margin, yPosition);
+            yPosition += lineHeight;
+        }
+        // Espaço extra antes da próxima seção
+        yPosition += lineHeight;
         
         checkPageBreak();
     }
     
     // Locação de Veículos (se preenchido)
-    if (data['necessita-locacao'] === 'Sim') {
+    // Aceita valores "Sim" ou "sim" (case-insensitive) para determinar se deve renderizar esta seção
+    if (data['necessita-locacao'] && data['necessita-locacao'].toString().toLowerCase() === 'sim') {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(201, 169, 97);
         doc.text('Locação de Veículos', margin, yPosition);
         yPosition += lineHeight;
-        
+
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(0, 0, 0);
@@ -549,22 +571,30 @@ async function generatePDF(data) {
         yPosition += lineHeight;
         doc.text(`Categoria: ${data['categoria-veiculo'] || 'N/A'}`, margin, yPosition);
         yPosition += lineHeight;
-        doc.text(`Retirada: ${data['data-retirada-veiculo'] || 'N/A'} em ${data['local-retirada'] || 'N/A'}`, margin, yPosition);
+        // Os campos de data de retirada e devolução vêm do formulário com nomes 'data-retirada' e 'data-devolucao'
+        doc.text(`Retirada: ${data['data-retirada'] || 'N/A'} em ${data['local-retirada'] || 'N/A'}`, margin, yPosition);
         yPosition += lineHeight;
-        doc.text(`Devolução: ${data['data-devolucao-veiculo'] || 'N/A'} em ${data['local-devolucao'] || 'N/A'}`, margin, yPosition);
-        yPosition += lineHeight * 2;
-        
+        doc.text(`Devolução: ${data['data-devolucao'] || 'N/A'} em ${data['local-devolucao'] || 'N/A'}`, margin, yPosition);
+        yPosition += lineHeight;
+        // Incluir observações de locação, se houver
+        if (data['observacoes-locacao']) {
+            doc.text(`Observações: ${data['observacoes-locacao']}`, margin, yPosition);
+            yPosition += lineHeight;
+        }
+        yPosition += lineHeight;
+
         checkPageBreak();
     }
     
     // Seguro Viagem (se preenchido)
-    if (data['necessita-seguro'] === 'Sim') {
+    // Aceita valores "Sim" ou "sim" (case-insensitive) para determinar se deve renderizar esta seção
+    if (data['necessita-seguro'] && data['necessita-seguro'].toString().toLowerCase() === 'sim') {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(201, 169, 97);
         doc.text('Seguro Viagem', margin, yPosition);
         yPosition += lineHeight;
-        
+
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(0, 0, 0);
@@ -573,40 +603,72 @@ async function generatePDF(data) {
         doc.text(`Tipo de Cobertura: ${data['tipo-cobertura'] || 'N/A'}`, margin, yPosition);
         yPosition += lineHeight;
         doc.text(`Valor: ${data['valor-cobertura'] || 'N/A'}`, margin, yPosition);
-        yPosition += lineHeight * 2;
-        
+        yPosition += lineHeight;
+        // Número da apólice, se informado
+        doc.text(`Número da Apólice: ${data['numero-apolice'] || 'N/A'}`, margin, yPosition);
+        yPosition += lineHeight;
+        // Incluir observações do seguro, se houver
+        if (data['observacoes-seguro']) {
+            doc.text(`Observações: ${data['observacoes-seguro']}`, margin, yPosition);
+            yPosition += lineHeight;
+        }
+        // Espaço adicional antes da próxima seção
+        yPosition += lineHeight;
+
         checkPageBreak();
     }
     
-    // Passeios (se preenchidos)
-    if (data['passeio-1']) {
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(201, 169, 97);
-        doc.text('Passeios e Serviços', margin, yPosition);
-        yPosition += lineHeight;
-        
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0, 0, 0);
-        
-        if (data['passeio-1']) {
-            doc.text(`1. ${data['passeio-1']} - ${data['data-passeio-1'] || ''} às ${data['horario-passeio-1'] || ''}`, margin, yPosition);
+    // Passeios e Serviços (se qualquer passeio, transfer adicional ou observações estiverem preenchidos)
+    {
+        const hasPasseio1 = data['passeio-1'] && data['passeio-1'].toString().trim() !== '';
+        const hasPasseio2 = data['passeio-2'] && data['passeio-2'].toString().trim() !== '';
+        const hasPasseio3 = data['passeio-3'] && data['passeio-3'].toString().trim() !== '';
+        const hasTransferAd = data['transfer-adicional'] && data['transfer-adicional'].toString().trim() !== '';
+        const hasObsServ = data['observacoes-servicos-gerais'] && data['observacoes-servicos-gerais'].toString().trim() !== '';
+
+        if (hasPasseio1 || hasPasseio2 || hasPasseio3 || hasTransferAd || hasObsServ) {
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(201, 169, 97);
+            doc.text('Passeios e Serviços', margin, yPosition);
             yPosition += lineHeight;
-        }
-        
-        if (data['passeio-2']) {
-            doc.text(`2. ${data['passeio-2']} - ${data['data-passeio-2'] || ''} às ${data['horario-passeio-2'] || ''}`, margin, yPosition);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+
+            let passeiosCounter = 1;
+            if (hasPasseio1) {
+                doc.text(`${passeiosCounter}. ${data['passeio-1']} - ${data['data-passeio-1'] || ''} às ${data['horario-passeio-1'] || ''}`, margin, yPosition);
+                passeiosCounter++;
+                yPosition += lineHeight;
+            }
+            if (hasPasseio2) {
+                doc.text(`${passeiosCounter}. ${data['passeio-2']} - ${data['data-passeio-2'] || ''} às ${data['horario-passeio-2'] || ''}`, margin, yPosition);
+                passeiosCounter++;
+                yPosition += lineHeight;
+            }
+            if (hasPasseio3) {
+                doc.text(`${passeiosCounter}. ${data['passeio-3']} - ${data['data-passeio-3'] || ''} às ${data['horario-passeio-3'] || ''}`, margin, yPosition);
+                passeiosCounter++;
+                yPosition += lineHeight;
+            }
+
+            // Transfer adicional
+            if (hasTransferAd) {
+                doc.text(`Transfer Adicional: ${data['transfer-adicional']}`, margin, yPosition);
+                yPosition += lineHeight;
+            }
+            // Observações gerais de serviços
+            if (hasObsServ) {
+                doc.text(`Observações: ${data['observacoes-servicos-gerais']}`, margin, yPosition);
+                yPosition += lineHeight;
+            }
+
+            // Espaço extra antes da próxima seção
             yPosition += lineHeight;
+            checkPageBreak();
         }
-        
-        if (data['passeio-3']) {
-            doc.text(`3. ${data['passeio-3']} - ${data['data-passeio-3'] || ''} às ${data['horario-passeio-3'] || ''}`, margin, yPosition);
-            yPosition += lineHeight;
-        }
-        
-        yPosition += lineHeight;
-        checkPageBreak();
     }
     
     // --------------------------------------------------------------------------------------
