@@ -557,7 +557,7 @@ async function generatePDF(data) {
     
     // Locação de Veículos (se preenchido)
     // Aceita valores "Sim" ou "sim" (case-insensitive) para determinar se deve renderizar esta seção
-    if (data['necessita-locacao'] && data['necessita-locacao'].toString().toLowerCase() === 'sim') {
+    if (data['necessita-locacao']) {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(201, 169, 97);
@@ -588,7 +588,7 @@ async function generatePDF(data) {
     
     // Seguro Viagem (se preenchido)
     // Aceita valores "Sim" ou "sim" (case-insensitive) para determinar se deve renderizar esta seção
-    if (data['necessita-seguro'] && data['necessita-seguro'].toString().toLowerCase() === 'sim') {
+    if (data['necessita-seguro']) {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(201, 169, 97);
