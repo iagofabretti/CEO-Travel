@@ -2,7 +2,8 @@
 // CONFIGURAÇÃO DO GOOGLE SHEETS
 // ============================================
 // Substitua pela URL do seu Web App do Google Apps Script
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVMlnEEMNtov3ozI_YHghKh9gqy6wXbQL2U5QH7p9am_E_WY8rl6NvDFcqno0P17_T/exec';
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxMKcwiUIoCZy7c2D26m29wEn2BkzIrYelFT0BhdARJxw5RPjwJ0Isr36l696cKRa6/exec';
+
 // ============================================
 
 // Variáveis globais
@@ -53,21 +54,30 @@ function initializeNavigationLinks() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            
-            // Remover classe active de todos os links
+
+            // Remove a classe 'active' de todos os links
             navLinks.forEach(l => l.classList.remove('active'));
-            
-            // Adicionar classe active ao link clicado
+
+            // Adiciona a classe 'active' ao link clicado
             this.classList.add('active');
-            
-            // Rolar suavemente para a seção
+
+            // Obtém o ID da seção alvo (ex: #dados-gerais)
             const targetId = this.getAttribute('href');
             const targetSection = document.querySelector(targetId);
-            
+
             if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                // Altura do cabeçalho + margem extra para deixar o título mais alto
+                const header = document.querySelector('.header');
+                const headerHeight = header ? header.offsetHeight : 120;
+                const extraOffset = 30; // 🔼 Ajuste fino — deixa o título um pouco mais pra cima
+                const totalOffset = headerHeight + extraOffset;
+
+                const elementPosition = targetSection.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.scrollY - totalOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
                 });
             }
         });
@@ -359,17 +369,20 @@ async function submitFormData() {
     const data = collectFormData();
     
     try {
-        // Gerar PDF primeiro
-        await generatePDF(data);
-        
+        const pdfResult = await generatePDF(data);
+
+        // 3. ADICIONA AS INFORMAÇÕES DO PDF AO OBJETO 'data'
+        if (pdfResult && pdfResult.base64) {
+            data['pdf_base64'] = pdfResult.base64;
+            data['pdf_filename'] = pdfResult.fileName;
+            data['nome_pdf'] = pdfResult.fileName; // ✅ adiciona também como coluna no Google Sheets
+        }
+
         // Enviar dados para o Google Sheets
         // Nota: mode 'no-cors' é necessário para Google Apps Script
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(data)
         });
         
@@ -385,6 +398,7 @@ async function submitFormData() {
         alert('❌ Erro ao enviar formulário.\n\nO PDF foi gerado, mas houve um problema ao salvar os dados no Google Sheets.\n\nPor favor, verifique:\n1. Se a URL do Google Apps Script está correta\n2. Se o Web App foi implantado corretamente\n3. Se "Quem tem acesso" está como "Qualquer pessoa"');
     }
 }
+
 
 // ============================================
 // GERAÇÃO DE PDF COM PAPEL TIMBRADO
@@ -595,6 +609,58 @@ async function generatePDF(data) {
         checkPageBreak();
     }
     
+    // --------------------------------------------------------------------------------------
+    // Termos e Condições (inserir antes da assinatura)
+    // Vamos extrair o texto do modal de termos e adicionar ao PDF.
+    // Caso o modal não exista ou esteja vazio, pulamos esta etapa.
+    try {
+        const termsModalBody = document.querySelector('#terms-modal .modal-body');
+        if (termsModalBody) {
+            let rawText = termsModalBody.innerText || termsModalBody.textContent || '';
+
+            // 🔧 Limpa emojis e caracteres não suportados (mantém acentos e pontuação)
+            rawText = rawText.replace(/[^\x00-\x7FÀ-ÿ\n\r.,;:!?()\-"'%€$@ ]/g, '');
+
+            const lines = rawText
+                .split('\n')
+                .map(l => l.trim())
+                .filter(l => l.length > 0);
+
+            if (lines.length > 0) {
+                //  Título da seção de termos
+                checkPageBreak();
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(201, 169, 97);
+                doc.text('Termos e Condições', margin, yPosition);
+                yPosition += lineHeight;
+
+                // 🩶 Adiciona cada linha do texto de termos
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(60, 60, 60);
+
+                lines.forEach(line => {
+                    checkPageBreak();
+
+                    // Quebrar linhas longas para caber na largura da página
+                    const splitLines = doc.splitTextToSize(line, pageWidth - margin * 2);
+
+                    splitLines.forEach(splitLine => {
+                        doc.text(splitLine, margin, yPosition);
+                        yPosition += lineHeight;
+                        checkPageBreak();
+                    });
+                });
+
+                yPosition += lineHeight;
+            }
+        }
+    } catch (err) {
+        console.error('Erro ao adicionar termos ao PDF:', err);
+    }
+
+    // --------------------------------------------------------------------------------------
     // Assinatura Digital
     if (signatureData) {
         checkPageBreak();
@@ -624,15 +690,56 @@ async function generatePDF(data) {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(100, 100, 100);
     doc.text(`Termos e Condições Aceitos: ${data.termos_aceitos} em ${data.data_aceite_termos}`, margin, yPosition);
-    
-    // Salvar PDF
-    const fileName = `Formulario_CEO_Travel_${data.cliente.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`;
+    yPosition += lineHeight;
+
+    // ------------------------------------------------------------------------
+    // Montar nome do PDF no formato: Cliente_Destino_DataViagem
+    const nomeCliente = (data.cliente || 'Cliente').replace(/\s+/g, '_');
+    const destino = (data.destino || 'Destino').replace(/\s+/g, '_');
+    const dataViagem = (data['data-viagem'] || 'Data').replace(/[^\w-]/g, '_');
+
+    const fileName = `Formulario_CEO_Travel_${nomeCliente}_${destino}_${dataViagem}.pdf`;
+
+    // Gerar string Base64 do PDF (Data URI)
+    const dataUriString = doc.output('datauristring');
+    const base64 = dataUriString.split(',')[1];
+
+    // Salvar localmente (download para usuário)
     doc.save(fileName);
+
+    // Retornar objeto com base64 e nome
+    return { base64, fileName };
 }
 
 // ============================================
 // FUNÇÕES AUXILIARES
 // ============================================
+
+/**
+ * Salva o payload como um arquivo .txt no computador do usuário (download pelo navegador).
+ * O arquivo será baixado na pasta padrão de downloads do navegador.
+ */
+function savePayloadAsTxt(payload) {
+    try {
+        const jsonString = JSON.stringify(payload, null, 2);
+        const blob = new Blob([jsonString], { type: 'text/plain;charset=utf-8' });
+        const fileName = `payload_ceo_travel_${new Date().getTime()}.txt`;
+
+        // Criar link temporário e clicar para forçar download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error('Erro ao salvar payload como txt:', err);
+        throw err;
+    }
+}
+
 
 function clearForm() {
     const form = document.getElementById('travel-form');
